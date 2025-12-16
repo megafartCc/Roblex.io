@@ -1,0 +1,453 @@
+import './style.css';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import SplineLoader from '@splinetool/loader';
+
+const API_BASE = 'https://backendroblex.up.railway.app';
+const SPLINE_URL = 'https://prod.spline.design/rmSQGMC9bFLycoiL/scene.splinecode';
+
+const words = ['Safe', 'Fast', 'Reliable', 'Cheap'];
+let wordElement = null;
+
+function dispatchLayoutChange() {
+  window.dispatchEvent(new Event('headerlayoutchange'));
+}
+
+function showAuthCard(cardId) {
+  const authCard = document.getElementById('auth-card');
+  const verifyCard = document.getElementById('verify-card');
+  const authMessage = document.getElementById('auth-message');
+  const verifyMessage = document.getElementById('verify-message');
+  if (!authCard || !verifyCard) return;
+
+  authCard.style.display = 'none';
+  verifyCard.style.display = 'none';
+  if (authMessage) authMessage.textContent = '';
+  if (verifyMessage) verifyMessage.textContent = '';
+
+  if (cardId === 'register' || cardId === 'login') {
+    authCard.style.display = 'block';
+  } else if (cardId === 'verify') {
+    verifyCard.style.display = 'block';
+  }
+}
+
+function initSplineBackground() {
+  const container = document.querySelector('.spline-background');
+  if (!container) return;
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
+  renderer.setClearAlpha(0);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  container.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color('#0c0c0c');
+
+  const camera = new THREE.OrthographicCamera(
+    window.innerWidth / -2,
+    window.innerWidth / 2,
+    window.innerHeight / 2,
+    window.innerHeight / -2,
+    -100000,
+    100000
+  );
+  camera.position.set(-1.24, 70, 1558.2);
+  camera.quaternion.setFromEuler(new THREE.Euler(0, 0, 0));
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.125;
+  controls.enableZoom = false;
+  controls.enablePan = false;
+
+  const loader = new SplineLoader();
+  loader.load(SPLINE_URL, (splineScene) => {
+    scene.add(splineScene);
+  });
+
+  function resize() {
+    const width = container.clientWidth || window.innerWidth;
+    const height = container.clientHeight || window.innerHeight;
+    renderer.setSize(width, height, false);
+
+    camera.left = width / -2;
+    camera.right = width / 2;
+    camera.top = height / 2;
+    camera.bottom = height / -2;
+    camera.updateProjectionMatrix();
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  function animate() {
+    controls.update();
+    renderer.render(scene, camera);
+  }
+
+  renderer.setAnimationLoop(animate);
+}
+
+function initHeaderAnimation() {
+  const header = document.querySelector('.header-container');
+  if (!header || !window.gsap) return;
+
+  const enterThreshold = 56;
+  const exitThreshold = 16;
+  const dropDuration = 0.35;
+  const shortenDuration = 0.6;
+  const waitBetween = 0.22;
+  const raiseDelay = 0.18;
+  const exitWait = 0.15;
+
+  const dropY = '14px';
+  const fullMaxWidth = '1150px';
+  const fullPadding = '18px 20px';
+  const clippedMaxWidth = '1020px';
+  const clippedPadding = '16px 18px';
+
+  let isActive = null;
+  let timeline = null;
+
+  gsap.set(header, { y: '0px', maxWidth: fullMaxWidth, padding: fullPadding });
+
+  function playEnter() {
+    if (isActive === true) return;
+    isActive = true;
+    if (timeline) timeline.kill();
+
+    header.classList.add('header-floating');
+
+    timeline = gsap.timeline({
+      defaults: { ease: 'power2.out' },
+      onUpdate: dispatchLayoutChange,
+      onComplete: dispatchLayoutChange,
+    });
+
+    timeline.to(header, { duration: dropDuration, y: dropY, ease: 'power2.out' }, 0);
+    timeline.to(
+      header,
+      { duration: shortenDuration, maxWidth: clippedMaxWidth, padding: clippedPadding, ease: 'power2.inOut' },
+      `+=${waitBetween}`
+    );
+  }
+
+  function playExit() {
+    if (isActive === false) return;
+    isActive = false;
+    if (timeline) timeline.kill();
+
+    timeline = gsap.timeline({
+      defaults: { ease: 'power2.out' },
+      onUpdate: dispatchLayoutChange,
+      onComplete: () => {
+        header.classList.remove('header-floating');
+        dispatchLayoutChange();
+      },
+    });
+
+    timeline.to(
+      header,
+      { duration: shortenDuration, maxWidth: fullMaxWidth, padding: fullPadding, ease: 'power2.inOut' },
+      exitWait
+    );
+    timeline.to(header, { duration: dropDuration, y: '0px', ease: 'power2.out' }, `+=${raiseDelay}`);
+  }
+
+  function handleScroll() {
+    const y = window.scrollY;
+    const next = isActive ? !(y < exitThreshold) : y > enterThreshold;
+    if (next === isActive) return;
+    next ? playEnter() : playExit();
+  }
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      window.requestAnimationFrame(handleScroll);
+    },
+    { passive: true }
+  );
+
+  isActive = window.scrollY > enterThreshold;
+  if (isActive) {
+    header.classList.add('header-floating');
+    gsap.set(header, { y: dropY, maxWidth: clippedMaxWidth, padding: clippedPadding });
+  } else {
+    header.classList.remove('header-floating');
+    gsap.set(header, { y: '0px', maxWidth: fullMaxWidth, padding: fullPadding });
+  }
+  dispatchLayoutChange();
+}
+
+function initNavHoverHighlight() {
+  const nav = document.querySelector('.main-nav');
+  if (!nav) return;
+
+  const links = Array.from(nav.querySelectorAll('.nav-link'));
+  if (links.length === 0) return;
+
+  const highlight = document.createElement('div');
+  highlight.className = 'nav-highlight';
+  nav.prepend(highlight);
+
+  let currentTarget = null;
+
+  function moveTo(target) {
+    currentTarget = target;
+    const navRect = nav.getBoundingClientRect();
+    const rect = target.getBoundingClientRect();
+    const x = rect.left - navRect.left;
+    const y = rect.top - navRect.top;
+    const h = rect.height;
+
+    highlight.style.setProperty('--x', `${x}px`);
+    highlight.style.setProperty('--y', `${y}px`);
+    highlight.style.height = `${h}px`;
+    highlight.style.width = `${rect.width}px`;
+  }
+
+  function show(target) {
+    moveTo(target);
+    highlight.classList.add('is-visible');
+  }
+
+  function hide() {
+    highlight.classList.remove('is-visible');
+    currentTarget = null;
+  }
+
+  for (const link of links) {
+    link.addEventListener('mouseenter', () => show(link));
+    link.addEventListener('focus', () => show(link));
+  }
+
+  nav.addEventListener('mouseleave', hide);
+  nav.addEventListener('focusout', (event) => {
+    if (!nav.contains(event.relatedTarget)) hide();
+  });
+
+  window.addEventListener('resize', () => {
+    if (!highlight.classList.contains('is-visible')) return;
+    if (!currentTarget) return;
+    moveTo(currentTarget);
+  });
+
+  window.addEventListener('headerlayoutchange', () => {
+    if (!highlight.classList.contains('is-visible')) return;
+    if (!currentTarget) return;
+    moveTo(currentTarget);
+  });
+}
+
+function initWordAnimation() {
+  if (!wordElement) return;
+  let wordIndex = 0;
+  const animationInterval = 1500;
+
+  function animateWordChange() {
+    wordElement.classList.remove('word-animate');
+
+    setTimeout(() => {
+      wordElement.textContent = words[wordIndex];
+      wordIndex = (wordIndex + 1) % words.length;
+      wordElement.classList.add('word-animate');
+    }, 50);
+  }
+
+  setInterval(animateWordChange, animationInterval);
+  animateWordChange();
+}
+
+function initPageLoader() {
+  const loader = document.getElementById('page-loader');
+  if (!loader || loader.dataset.bound) return;
+  loader.dataset.bound = 'true';
+
+  const navEntry = (performance.getEntriesByType && performance.getEntriesByType('navigation')[0]) || null;
+  const legacyType = performance.navigation ? performance.navigation.type : 0;
+  const isReload = (navEntry && navEntry.type === 'reload') || legacyType === 1;
+
+  if (!isReload || !window.gsap) {
+    loader.style.display = 'none';
+    loader.style.pointerEvents = 'none';
+    loader.style.opacity = '0';
+    return;
+  }
+
+  const logo = loader.querySelector('.page-loader__logo');
+  const pulse = loader.querySelector('.page-loader__pulse');
+
+  const intro = gsap.timeline({
+    defaults: { ease: 'power2.out' },
+    onComplete: () => {
+      gsap.set(loader, { display: 'none', pointerEvents: 'none' });
+    },
+  });
+
+  gsap.set(loader, { autoAlpha: 1, display: 'flex', pointerEvents: 'auto' });
+  gsap.set(logo, { autoAlpha: 0, scale: 0.7, rotation: -12 });
+  gsap.set(pulse, { autoAlpha: 0, scale: 0.6 });
+
+  intro
+    .to(logo, { duration: 0.55, scale: 1.05, rotation: 0, autoAlpha: 1, ease: 'back.out(1.4)' })
+    .to(pulse, { duration: 0.6, scale: 1.25, autoAlpha: 0.6, ease: 'power1.out' }, 0)
+    .to(pulse, { duration: 0.4, scale: 1.6, autoAlpha: 0 }, '>-0.2')
+    .to(loader, { duration: 0.4, autoAlpha: 0 }, '>-0.05');
+}
+
+function initAuthWithBase() {
+  const authForm = document.getElementById('auth-form');
+  const authMessage = document.getElementById('auth-message');
+  const tabs = document.querySelectorAll('.auth-tab');
+  const verifyForm = document.getElementById('verify-form');
+  const verifyMessage = document.getElementById('verify-message');
+  let registeredEmail = '';
+
+  if (!authForm || !verifyForm || !tabs.length) return;
+
+  let mode = 'login';
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      tabs.forEach((t) => t.classList.remove('active'));
+      tab.classList.add('active');
+      mode = tab.dataset.mode || 'login';
+      authMessage.style.color = '#ff9b9b';
+      authMessage.textContent = '';
+    });
+  });
+
+  authForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    authMessage.style.color = '#ff9b9b';
+    authMessage.textContent = '';
+    const email = authForm.email.value.trim();
+    const password = authForm.password.value;
+    const submitButton = authForm.querySelector('.auth-submit');
+
+    if (!email || !password) {
+      authMessage.textContent = 'Email and password required';
+      return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Processing...';
+
+    try {
+      const res = await fetch(`${API_BASE}/api/${mode}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (res.status === 403 && data.error && data.error.includes('verified')) {
+          registeredEmail = email;
+          const verifyEmailField = document.getElementById('verify-email');
+          if (verifyEmailField) verifyEmailField.value = email;
+          if (verifyMessage) {
+            verifyMessage.textContent = 'Please enter the 6-digit code sent to your email.';
+          }
+          showAuthCard('verify');
+          return;
+        }
+
+        authMessage.style.color = '#ff9b9b';
+        authMessage.textContent = data.error || 'Request failed';
+        return;
+      }
+
+      if (mode === 'register') {
+        registeredEmail = email;
+        const verifyEmailField = document.getElementById('verify-email');
+        if (verifyEmailField) verifyEmailField.value = email;
+        if (verifyMessage) {
+          verifyMessage.innerHTML = `
+                    <span class="success-instruction">バ. Registration Successful!</span>
+                    <br>
+                    <span class="success-instruction-detail">
+                        A 6-digit code has been sent to your email. Please enter it below.
+                    </span>
+                `;
+        }
+        showAuthCard('verify');
+        authForm.reset();
+      } else if (mode === 'login') {
+        authMessage.style.color = '#9bffa7';
+        authMessage.textContent = 'Logged in! Redirecting to dashboard...';
+      }
+    } catch (err) {
+      console.error(err);
+      authMessage.style.color = '#ff9b9b';
+      authMessage.textContent = 'Network error. Check console.';
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Continue';
+    }
+  });
+
+  verifyForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    verifyMessage.style.color = '#ff9b9b';
+    verifyMessage.textContent = '';
+
+    const email = verifyForm.email.value || registeredEmail;
+    const code = verifyForm.code.value;
+    const submitButton = verifyForm.querySelector('#verify-submit');
+
+    if (code.length !== 6 || isNaN(code)) {
+      verifyMessage.textContent = 'Please enter a valid 6-digit code.';
+      return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Verifying...';
+
+    try {
+      const res = await fetch(`${API_BASE}/api/verify-code`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        verifyMessage.style.color = '#9bffa7';
+        verifyMessage.textContent = 'バ. Verification complete! You can now log in.';
+        verifyForm.reset();
+        setTimeout(() => {
+          showAuthCard('login');
+        }, 2000);
+      } else {
+        verifyMessage.style.color = '#ff9b9b';
+        verifyMessage.textContent = data.error || 'Invalid code or email. Please try again.';
+      }
+    } catch (err) {
+      console.error(err);
+      verifyMessage.style.color = '#ff9b9b';
+      verifyMessage.textContent = 'Network error during verification.';
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Verify Account';
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  wordElement = document.getElementById('changing-word');
+  initSplineBackground();
+  initHeaderAnimation();
+  initNavHoverHighlight();
+  initWordAnimation();
+  initPageLoader();
+  initAuthWithBase();
+});
+
+window.showAuthCard = showAuthCard;
