@@ -6,7 +6,16 @@ const bufferUtilsPath = path.resolve(
   'node_modules/three/examples/jsm/utils/BufferGeometryUtils.js',
 );
 
+const allowedHosts = [
+  'localhost',
+  '127.0.0.1',
+  'roblexio-production-8643.up.railway.app',
+];
+
 export default defineConfig({
+  preview: {
+    allowedHosts,
+  },
   resolve: {
     alias: {
       'three/examples/jsm/utils/BufferGeometryUtils.js':
