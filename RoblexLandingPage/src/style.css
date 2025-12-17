@@ -215,6 +215,15 @@ body.is-scrolled .brand-icon {
     .brand {
         margin-left: 0;
     }
+
+    .hero-graphic {
+        min-height: 640px;
+        padding: 0 16px;
+    }
+
+    .spline-background spline-viewer {
+        transform: scale(1) translateY(0);
+    }
 }
 
 /* --- 5. Main Hero Text (Large and Centered) --- */
@@ -224,21 +233,21 @@ body.is-scrolled .brand-icon {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 120px 0 80px;
+    padding: 140px 0 80px;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .hero-graphic {
     width: 100%;
-    min-height: clamp(640px, calc(100vh - 140px), 1040px);
+    min-height: clamp(720px, calc(100vh - 100px), 1140px);
     padding: 0 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .spline-background {
@@ -250,7 +259,8 @@ body.is-scrolled .brand-icon {
     z-index: 0;
     opacity: 0.85;
     pointer-events: none;
-    overflow: hidden;
+    overflow: visible;
+    transform-origin: center;
 }
 
 .spline-background spline-viewer {
@@ -260,6 +270,8 @@ body.is-scrolled .brand-icon {
     height: 100%;
     display: block;
     filter: drop-shadow(0 35px 90px rgba(0, 0, 0, 0.5));
+    transform-origin: center center;
+    transform: scale(0.9) translateY(20px);
 }
 
 .hero-graphic::after {
