@@ -65,8 +65,13 @@ function initSplineBackground() {
 
   const loader = new SplineLoader();
   loader.load(SPLINE_URL, (splineScene) => {
+    splineScene.scale.setScalar(1.2);
+    splineScene.position.set(0, -40, 0);
     scene.add(splineScene);
   });
+
+  const particleField = createParticleField();
+  scene.add(particleField.points);
 
   function resize() {
     const width = container.clientWidth || window.innerWidth;
@@ -83,8 +88,12 @@ function initSplineBackground() {
   window.addEventListener('resize', resize);
   resize();
 
+  const clock = new THREE.Clock();
+
   function animate() {
+    const delta = clock.getDelta();
     controls.update();
+    updateParticleField(particleField, delta);
     renderer.render(scene, camera);
   }
 
@@ -451,3 +460,60 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.showAuthCard = showAuthCard;
+
+function createParticleField() {
+  const particleCount = 600;
+  const positions = new Float32Array(particleCount * 3);
+  const speeds = new Float32Array(particleCount);
+
+  for (let i = 0; i < particleCount; i += 1) {
+    resetParticle(i, positions, speeds);
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+  const material = new THREE.PointsMaterial({
+    color: 0x7eaaff,
+    size: 6,
+    sizeAttenuation: true,
+    transparent: true,
+    opacity: 0.7,
+    depthWrite: false,
+  });
+
+  const points = new THREE.Points(geometry, material);
+  points.position.z = -200;
+
+  return { points, geometry, positions, speeds };
+}
+
+function resetParticle(index, positions, speeds) {
+  const radius = 300 + Math.random() * 800;
+  const angle = Math.random() * Math.PI * 2;
+  const x = Math.cos(angle) * radius;
+  const y = -150 + Math.random() * 300;
+  const z = -1400 - Math.random() * 800;
+
+  positions[index * 3 + 0] = x;
+  positions[index * 3 + 1] = y;
+  positions[index * 3 + 2] = z;
+
+  speeds[index] = 40 + Math.random() * 40;
+}
+
+function updateParticleField(field, delta) {
+  const { positions, speeds, geometry } = field;
+  const moveAmount = delta || 0.016;
+
+  for (let i = 0; i < speeds.length; i += 1) {
+    const idx = i * 3 + 2;
+    positions[idx] += speeds[i] * moveAmount;
+
+    if (positions[idx] > 200) {
+      resetParticle(i, positions, speeds);
+    }
+  }
+
+  geometry.attributes.position.needsUpdate = true;
+}

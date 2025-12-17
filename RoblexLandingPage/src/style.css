@@ -268,8 +268,8 @@ body.is-scrolled .brand-icon {
 
 .hero-graphic {
     width: 100%;
-    min-height: clamp(520px, calc(100vh - 200px), 900px);
-    padding: 0 20px;
+    min-height: clamp(640px, calc(100vh - 140px), 1040px);
+    padding: 0 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -308,11 +308,11 @@ body.is-scrolled .brand-icon {
 }
 
 .hero-content {
-    max-width: 640px;
-    padding: 0 20px;
+    max-width: 760px;
+    padding: 0 24px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 24px;
     position: relative;
     z-index: 1;
     align-items: center;
@@ -320,7 +320,7 @@ body.is-scrolled .brand-icon {
 }
 
 .hero-title {
-    font-size: 3rem;
+    font-size: clamp(2.8rem, 6vw, 4.4rem);
     font-weight: 800;
     letter-spacing: 0.4px;
     color: #F2F2F2;
@@ -328,9 +328,9 @@ body.is-scrolled .brand-icon {
 }
 
 .hero-subtitle {
-    color: rgba(255, 255, 255, 0.76);
-    font-size: 1.05rem;
-    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.9;
 }
 
 .hero-cta {
