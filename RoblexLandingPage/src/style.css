@@ -222,10 +222,10 @@ body.is-scrolled .brand-icon {
     }
 
     .hero-starfield {
-        top: -28%;
-        left: -18%;
-        width: 136%;
-        height: 160%;
+        top: -55%;
+        left: -35%;
+        width: 170%;
+        height: 210%;
     }
 
     .spline-background spline-viewer {
@@ -259,10 +259,10 @@ body.is-scrolled .brand-icon {
 
 .hero-starfield {
     position: absolute;
-    top: -40%;
-    left: -12%;
-    width: 124%;
-    height: 175%;
+    top: -65%;
+    left: -25%;
+    width: 150%;
+    height: 230%;
     pointer-events: none;
     overflow: visible;
     z-index: 0;
@@ -274,21 +274,27 @@ body.is-scrolled .brand-icon {
     position: absolute;
     inset: 0;
     background-image:
-        radial-gradient(1px 1px at 5% 15%, rgba(255, 255, 255, 0.5), transparent),
-        radial-gradient(1px 1px at 55% 25%, rgba(255, 255, 255, 0.35), transparent),
-        radial-gradient(2px 2px at 20% 70%, rgba(255, 255, 255, 0.4), transparent),
+        radial-gradient(1px 1px at 5% 15%, rgba(255, 255, 255, 0.55), transparent),
+        radial-gradient(1px 1px at 55% 25%, rgba(255, 255, 255, 0.4), transparent),
+        radial-gradient(2px 2px at 20% 70%, rgba(255, 255, 255, 0.45), transparent),
         radial-gradient(1.5px 1.5px at 70% 80%, rgba(255, 255, 255, 0.35), transparent),
-        radial-gradient(1px 1px at 85% 40%, rgba(255, 255, 255, 0.45), transparent);
-    background-size: 520px 520px;
+        radial-gradient(1px 1px at 85% 40%, rgba(255, 255, 255, 0.5), transparent);
+    background-size: 640px 640px;
     animation: starDrift 70s linear infinite;
     opacity: 0.55;
 }
 
 .hero-starfield::after {
-    opacity: 0.3;
-    background-size: 360px 360px;
-    animation-duration: 110s;
+    opacity: 0.28;
+    background-size: 420px 420px;
+    animation-duration: 120s;
     animation-direction: reverse;
+    filter: blur(0.3px);
+}
+
+.hero-starfield::before {
+    mask-image: radial-gradient(circle at 50% 65%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.4) 35%, rgba(0, 0, 0, 0.8) 70%, #000 100%);
+    -webkit-mask-image: radial-gradient(circle at 50% 65%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.4) 35%, rgba(0, 0, 0, 0.8) 70%, #000 100%);
 }
 
 .spline-background {
