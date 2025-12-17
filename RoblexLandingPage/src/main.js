@@ -387,3 +387,18 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.showAuthCard = showAuthCard;
+
+const splineViewer = document.querySelector('.spline-background spline-viewer');
+if (splineViewer) {
+  splineViewer.addEventListener('load', () => {
+    try {
+      const root = splineViewer.shadowRoot || splineViewer;
+      const labels = root.querySelectorAll('[data-name=\"Text\"], [data-name=\"text\"]');
+      labels.forEach((node) => {
+        node.style.display = 'none';
+      });
+    } catch (err) {
+      console.warn('Unable to hide Spline text nodes', err);
+    }
+  });
+}
