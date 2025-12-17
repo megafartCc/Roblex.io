@@ -340,12 +340,66 @@ function initAuthWithBase() {
   });
 }
 
+function initScrollAnimations() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+  const { gsap } = window;
+  gsap.registerPlugin(window.ScrollTrigger);
+
+  const heroContent = document.querySelector('.hero-content');
+  if (heroContent) {
+    const heroItems = heroContent.querySelectorAll(':scope > *');
+    if (heroItems.length) {
+      gsap.set(heroItems, { opacity: 0, y: 32 });
+      gsap.to(heroItems, {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        ease: 'power2.out',
+        stagger: 0.15,
+        scrollTrigger: {
+          trigger: heroContent,
+          start: 'top 80%',
+          once: true,
+        },
+      });
+    }
+  }
+
+  const splineLayer = document.querySelector('.spline-background');
+  if (splineLayer) {
+    gsap.to(splineLayer, {
+      scale: 1.05,
+      y: -50,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.scroll-spacer',
+        start: 'top bottom',
+        end: 'top top',
+        scrub: true,
+      },
+    });
+  }
+
+  const header = document.querySelector('.main-header');
+  if (header) {
+    gsap.from(header, {
+      opacity: 0,
+      y: -40,
+      duration: 0.65,
+      ease: 'power2.out',
+    });
+  }
+
+  window.ScrollTrigger.refresh();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   wordElement = document.getElementById('changing-word');
   initHeaderAnimation();
   initNavHoverHighlight();
   initWordAnimation();
   initAuthWithBase();
+  initScrollAnimations();
 });
 
 window.showAuthCard = showAuthCard;
