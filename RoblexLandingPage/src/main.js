@@ -199,43 +199,6 @@ function initWordAnimation() {
   animateWordChange();
 }
 
-function initPageLoader() {
-  const loader = document.getElementById('page-loader');
-  if (!loader || loader.dataset.bound) return;
-  loader.dataset.bound = 'true';
-
-  const navEntry = (performance.getEntriesByType && performance.getEntriesByType('navigation')[0]) || null;
-  const legacyType = performance.navigation ? performance.navigation.type : 0;
-  const isReload = (navEntry && navEntry.type === 'reload') || legacyType === 1;
-
-  if (!isReload || !window.gsap) {
-    loader.style.display = 'none';
-    loader.style.pointerEvents = 'none';
-    loader.style.opacity = '0';
-    return;
-  }
-
-  const logo = loader.querySelector('.page-loader__logo');
-  const pulse = loader.querySelector('.page-loader__pulse');
-
-  const intro = gsap.timeline({
-    defaults: { ease: 'power2.out' },
-    onComplete: () => {
-      gsap.set(loader, { display: 'none', pointerEvents: 'none' });
-    },
-  });
-
-  gsap.set(loader, { autoAlpha: 1, display: 'flex', pointerEvents: 'auto' });
-  gsap.set(logo, { autoAlpha: 0, scale: 0.7, rotation: -12 });
-  gsap.set(pulse, { autoAlpha: 0, scale: 0.6 });
-
-  intro
-    .to(logo, { duration: 0.55, scale: 1.05, rotation: 0, autoAlpha: 1, ease: 'back.out(1.4)' })
-    .to(pulse, { duration: 0.6, scale: 1.25, autoAlpha: 0.6, ease: 'power1.out' }, 0)
-    .to(pulse, { duration: 0.4, scale: 1.6, autoAlpha: 0 }, '>-0.2')
-    .to(loader, { duration: 0.4, autoAlpha: 0 }, '>-0.05');
-}
-
 function initAuthWithBase() {
   const authForm = document.getElementById('auth-form');
   const authMessage = document.getElementById('auth-message');
@@ -382,7 +345,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeaderAnimation();
   initNavHoverHighlight();
   initWordAnimation();
-  initPageLoader();
   initAuthWithBase();
 });
 
