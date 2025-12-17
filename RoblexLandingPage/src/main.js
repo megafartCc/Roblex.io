@@ -363,13 +363,28 @@ function initScrollAnimations() {
         },
       });
     }
+
+    gsap.fromTo(
+      heroContent,
+      { yPercent: 0 },
+      {
+        yPercent: -12,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.main-content',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      }
+    );
   }
 
   const splineLayer = document.querySelector('.spline-background');
   if (splineLayer) {
     gsap.to(splineLayer, {
-      scale: 1.05,
-      y: -50,
+      scale: 1.1,
+      y: -90,
       ease: 'none',
       scrollTrigger: {
         trigger: '.scroll-spacer',
