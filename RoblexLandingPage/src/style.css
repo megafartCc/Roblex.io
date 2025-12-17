@@ -250,6 +250,23 @@ body.is-scrolled .brand-icon {
     overflow: visible;
 }
 
+.hero-graphic::before {
+    content: "";
+    position: absolute;
+    inset: -8%;
+    background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.55), transparent),
+        radial-gradient(1px 1px at 80% 10%, rgba(255, 255, 255, 0.45), transparent),
+        radial-gradient(2px 2px at 30% 80%, rgba(255, 255, 255, 0.35), transparent),
+        radial-gradient(1.5px 1.5px at 70% 60%, rgba(255, 255, 255, 0.4), transparent),
+        radial-gradient(1px 1px at 50% 30%, rgba(255, 255, 255, 0.5), transparent);
+    background-size: 520px 520px;
+    opacity: 0.55;
+    animation: starDrift 65s linear infinite;
+    z-index: 0;
+    pointer-events: none;
+}
+
 .spline-background {
     position: absolute;
     inset: 0;
@@ -280,6 +297,7 @@ body.is-scrolled .brand-icon {
     inset: 0;
     background: radial-gradient(circle at top, rgba(10, 10, 10, 0.2), rgba(10, 10, 10, 0.9));
     pointer-events: none;
+    z-index: 0;
 }
 
 .hero-content {
@@ -300,6 +318,33 @@ body.is-scrolled .brand-icon {
     letter-spacing: 0.4px;
     color: #F2F2F2;
     text-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
+}
+
+.hero-graphic::before,
+.spline-background,
+.hero-graphic::after {
+    transform-style: preserve-3d;
+}
+
+.hero-graphic .spline-background,
+.hero-graphic .hero-content {
+    z-index: 1;
+}
+
+.hero-content {
+    z-index: 2;
+}
+
+@keyframes starDrift {
+    0% {
+        transform: translate3d(-4%, -4%, 0) scale(1);
+    }
+    50% {
+        transform: translate3d(4%, 3%, 0) scale(1.05);
+    }
+    100% {
+        transform: translate3d(-4%, -4%, 0) scale(1);
+    }
 }
 
 .hero-subtitle {
