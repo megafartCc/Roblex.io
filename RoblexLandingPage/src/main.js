@@ -1,10 +1,6 @@
 import './style.css';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import SplineLoader from '@splinetool/loader';
 
 const API_BASE = 'https://backendroblex.up.railway.app';
-const SPLINE_URL = 'https://prod.spline.design/rmSQGMC9bFLycoiL/scene.splinecode';
 
 const words = ['Safe', 'Fast', 'Reliable', 'Cheap'];
 let wordElement = null;
@@ -30,74 +26,6 @@ function showAuthCard(cardId) {
   } else if (cardId === 'verify') {
     verifyCard.style.display = 'block';
   }
-}
-
-function initSplineBackground() {
-  const container = document.querySelector('.spline-background');
-  if (!container) return;
-
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFShadowMap;
-  renderer.setClearAlpha(0);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-  container.appendChild(renderer.domElement);
-
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#0c0c0c');
-
-  const camera = new THREE.OrthographicCamera(
-    window.innerWidth / -2,
-    window.innerWidth / 2,
-    window.innerHeight / 2,
-    window.innerHeight / -2,
-    -100000,
-    100000
-  );
-  camera.position.set(-1.24, 70, 1558.2);
-  camera.quaternion.setFromEuler(new THREE.Euler(0, 0, 0));
-
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.125;
-  controls.enableZoom = false;
-  controls.enablePan = false;
-
-  const loader = new SplineLoader();
-  loader.load(SPLINE_URL, (splineScene) => {
-    splineScene.scale.setScalar(1.2);
-    splineScene.position.set(0, -40, 0);
-    scene.add(splineScene);
-  });
-
-  const particleField = createParticleField();
-  scene.add(particleField.points);
-
-  function resize() {
-    const width = container.clientWidth || window.innerWidth;
-    const height = container.clientHeight || window.innerHeight;
-    renderer.setSize(width, height, false);
-
-    camera.left = width / -2;
-    camera.right = width / 2;
-    camera.top = height / 2;
-    camera.bottom = height / -2;
-    camera.updateProjectionMatrix();
-  }
-
-  window.addEventListener('resize', resize);
-  resize();
-
-  const clock = new THREE.Clock();
-
-  function animate() {
-    const delta = clock.getDelta();
-    controls.update();
-    updateParticleField(particleField, delta);
-    renderer.render(scene, camera);
-  }
-
-  renderer.setAnimationLoop(animate);
 }
 
 function initHeaderAnimation() {
@@ -451,7 +379,6 @@ function initAuthWithBase() {
 
 document.addEventListener('DOMContentLoaded', () => {
   wordElement = document.getElementById('changing-word');
-  initSplineBackground();
   initHeaderAnimation();
   initNavHoverHighlight();
   initWordAnimation();
@@ -460,60 +387,3 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.showAuthCard = showAuthCard;
-
-function createParticleField() {
-  const particleCount = 600;
-  const positions = new Float32Array(particleCount * 3);
-  const speeds = new Float32Array(particleCount);
-
-  for (let i = 0; i < particleCount; i += 1) {
-    resetParticle(i, positions, speeds);
-  }
-
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-  const material = new THREE.PointsMaterial({
-    color: 0x7eaaff,
-    size: 6,
-    sizeAttenuation: true,
-    transparent: true,
-    opacity: 0.7,
-    depthWrite: false,
-  });
-
-  const points = new THREE.Points(geometry, material);
-  points.position.z = -200;
-
-  return { points, geometry, positions, speeds };
-}
-
-function resetParticle(index, positions, speeds) {
-  const radius = 300 + Math.random() * 800;
-  const angle = Math.random() * Math.PI * 2;
-  const x = Math.cos(angle) * radius;
-  const y = -150 + Math.random() * 300;
-  const z = -1400 - Math.random() * 800;
-
-  positions[index * 3 + 0] = x;
-  positions[index * 3 + 1] = y;
-  positions[index * 3 + 2] = z;
-
-  speeds[index] = 40 + Math.random() * 40;
-}
-
-function updateParticleField(field, delta) {
-  const { positions, speeds, geometry } = field;
-  const moveAmount = delta || 0.016;
-
-  for (let i = 0; i < speeds.length; i += 1) {
-    const idx = i * 3 + 2;
-    positions[idx] += speeds[i] * moveAmount;
-
-    if (positions[idx] > 200) {
-      resetParticle(i, positions, speeds);
-    }
-  }
-
-  geometry.attributes.position.needsUpdate = true;
-}

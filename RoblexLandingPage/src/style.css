@@ -290,7 +290,7 @@ body.is-scrolled .brand-icon {
     overflow: hidden;
 }
 
-.spline-background canvas {
+.spline-background spline-viewer {
     position: absolute;
     inset: 0;
     width: 100%;

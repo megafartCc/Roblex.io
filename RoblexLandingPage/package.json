@@ -10,10 +10,7 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "dependencies": {
-    "@splinetool/loader": "^0.9.425",
-    "three": "^0.152.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "vite": "^5.0.0"
   }
