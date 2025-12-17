@@ -64,13 +64,12 @@ body {
 }
 
 .header-container {
-    width: auto;
-    max-width: 520px;
+    width: min(90%, 560px);
     margin: 0 auto;
-    padding: 4px 16px;
-    display: flex;
+    padding: 6px 18px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    justify-content: center;
     gap: 12px;
     position: relative;
     border-radius: 999px;
@@ -153,7 +152,8 @@ body {
 }
 
 .main-nav {
-    flex: 1;
+    justify-self: center;
+    flex: 0 1 auto;
     display: flex;
     gap: 6px;
     align-items: center;
