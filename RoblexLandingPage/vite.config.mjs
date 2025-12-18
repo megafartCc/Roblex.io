@@ -7,6 +7,7 @@ const bufferUtilsPath = path.resolve(
 );
 
 export default defineConfig({
+  appType: 'mpa',
   preview: {
     allowedHosts: true,
   },
