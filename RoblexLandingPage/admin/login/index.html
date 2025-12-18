@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,39 +7,51 @@
   <link rel="stylesheet" href="./styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <main class="login-shell">
-    <section class="login-card" role="main">
-      <header class="login-card__header">
-        <p class="eyebrow">Internal Portal</p>
-        <h1>Roblex Control Room</h1>
-        <p class="subtitle">Production operators only. All sign-ins are audited.</p>
+  <main class="admin-stage">
+    <div class="stage__orb"></div>
+    <section class="auth-card" role="main">
+      <header class="auth-card__header">
+        <div class="auth-card__title">
+          <p class="eyebrow">Roblex / internal</p>
+          <h1>???????????</h1>
+        </div>
+        <button class="auth-card__dismiss" type="button" aria-label="??????? ?????">
+          <span></span>
+          <span></span>
+        </button>
       </header>
 
-      <form class="login-form" id="admin-login-form" novalidate>
-        <label class="form-field">
-          <span>Email</span>
-          <input type="email" name="email" placeholder="admin@roblex.io" required autocomplete="username" />
+      <form class="auth-form" id="admin-login-form" novalidate>
+        <label class="field">
+          <span class="field__label">?????</span>
+          <input type="email" name="email" placeholder="operator@roblex.io" required autocomplete="username" />
         </label>
 
-        <label class="form-field">
-          <span>Password</span>
-          <input type="password" name="password" placeholder="••••••••" required autocomplete="current-password" />
+        <label class="field">
+          <div class="field__header">
+            <span class="field__label">??????</span>
+            <button class="peek" type="button" aria-label="???????? ??????">
+              <span></span>
+            </button>
+          </div>
+          <input type="password" name="password" placeholder="••••••••••" required autocomplete="current-password" />
         </label>
 
-        <div class="form-meta">
-          <label class="remember">
-            <input type="checkbox" name="remember" />
-            <span>Remember this device</span>
-          </label>
-          <a class="link" href="mailto:security@roblex.io">Forgot access?</a>
-        </div>
-
-        <button type="submit">Access Console</button>
-        <p class="legal">By continuing you acknowledge the <a href="https://roblex.io/security">Roblex security policy</a>.</p>
+        <button class="primary-button" type="submit">??????????</button>
       </form>
+
+      <footer class="auth-card__footer">
+        <button class="status-pill" type="button">
+          <span class="status-pill__icon"></span>
+          <span>?? ???????</span>
+        </button>
+        <button class="footer-chevron" type="button" aria-label="??????? ?????? ?????????">
+          <span></span>
+        </button>
+      </footer>
     </section>
   </main>
 
