@@ -10,28 +10,28 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <main class="Dark">
+  <div class="Dark" data-mode="dark">
     <img class="Staticalpha1" src="https://placehold.co/846x846" alt="Decorative aurora" loading="lazy" />
 
-    <section class="Frame1" role="main">
+    <main class="Frame1" role="main">
       <header class="HeaderForms">
-        <div class="HeaderForms__title">Авторизация</div>
-        <button class="ButtonsHeaderForms" type="button" aria-label="Переключить тему">
+        <h1 class="HeaderForms__title">Авторизация</h1>
+        <button class="ButtonsHeaderForms" id="theme-toggle" type="button" aria-label="Переключить тему">
           <span class="icon-sun" aria-hidden="true"></span>
         </button>
       </header>
 
       <form class="Frame14276" id="admin-login-form" novalidate>
         <div class="Frame14381">
-          <label class="Inputs" data-field="email">
+          <label class="Inputs" data-field="email" for="admin-email">
             <span class="Inputs__label">Почта</span>
-            <input type="email" name="email" placeholder="operator@roblex.io" autocomplete="username" required />
+            <input id="admin-email" type="email" name="email" placeholder="operator@roblex.io" autocomplete="username" required />
           </label>
 
-          <label class="Inputs Inputs--password" data-field="password">
+          <label class="Inputs Inputs--password" data-field="password" for="admin-password">
             <span class="Inputs__label">Пароль</span>
             <div class="Inputs__control">
-              <input type="password" name="password" placeholder="••••••••" autocomplete="current-password" required />
+              <input id="admin-password" type="password" name="password" placeholder="••••••••" autocomplete="current-password" required />
               <button class="peek" type="button" aria-label="Показать пароль">
                 <span class="icon-eye" aria-hidden="true"></span>
               </button>
@@ -45,16 +45,16 @@
       </form>
 
       <footer class="Frame14278">
-        <button class="status-pill" type="button">
+        <button class="status-pill" type="button" id="remember-toggle" aria-pressed="false">
           <span class="status-pill__indicator" aria-hidden="true"></span>
-          <span>Не выбрано</span>
+          <span class="status-pill__text">Не выбрано</span>
         </button>
         <button class="footer-chevron" type="button" aria-label="Открыть список окружений">
           <span class="icon-chevron" aria-hidden="true"></span>
         </button>
       </footer>
-    </section>
-  </main>
+    </main>
+  </div>
 
   <script type="module" src="./script.js"></script>
 </body>
