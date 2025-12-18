@@ -2,8 +2,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 import cors from 'cors';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { pool, migrate } from './db.js';
 // Make sure this path and file exists: src/utils/email.js
 import { sendVerificationCodeEmail } from './utils/email.js'; 
@@ -12,8 +10,6 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Middlewares
 app.use(cors({
@@ -236,16 +232,6 @@ app.post('/api/resend-code', async (req, res) => {
         res.status(500).json({ error: 'Internal error during resend process.' });
     }
 });
-
-// ------------------------------------
-// Static Admin Login (served separately from public landing)
-// ------------------------------------
-const adminLoginPath = path.resolve(__dirname, '..', 'RoblexLandingPage', 'AdminPanel', 'management', 'login');
-app.use('/management/login', express.static(adminLoginPath));
-app.get('/management/login', (_req, res) => {
-    res.sendFile(path.join(adminLoginPath, 'index.html'));
-});
-
 
 // ------------------------------------
 // Server Initialization
