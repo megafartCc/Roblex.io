@@ -15,8 +15,13 @@ peekButton?.addEventListener("click", () => {
 
 themeToggle?.addEventListener("click", () => {
   if (!surface) return;
-  const next = surface.dataset.collection1Mode === "dark" ? "light" : "dark";
+  const current = surface.dataset.collection1Mode || "dark";
+  const next = current === "dark" ? "light" : "dark";
   surface.dataset.collection1Mode = next;
+  themeToggle.setAttribute(
+    "aria-label",
+    next === "dark" ? "Переключить на светлую тему" : "Переключить на тёмную тему"
+  );
 });
 
 rememberToggle?.addEventListener("click", () => {
