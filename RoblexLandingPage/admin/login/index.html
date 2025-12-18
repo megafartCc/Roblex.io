@@ -1,58 +1,37 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Авторизация - Roblex</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css?family=Inter:500,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css" />
-</head>
-<body>
-  <div class="bg-collection-1-background w-full min-w-[1920px] min-h-[1080px] relative" data-collection-1-mode="dark">
-
-    <form id="admin-login-form" class="flex flex-col w-[419px] items-start absolute top-[calc(50.00%_-_186px)] left-[calc(50.00%_-_209px)] rounded-xl overflow-hidden border-2 border-solid border-collection-1-stroke shadow-[0px_4px_16px_#1111110a]">
-      <header class="flex h-20 items-center justify-between p-6 relative self-stretch w-full bg-collection-1-sub-default border-b [border-bottom-style:solid] border-collection-1-stroke">
-        <h1 class="font-semibold text-collection-1-glyphs-title text-[28px] tracking-[-0.84px] leading-7 relative w-fit whitespace-nowrap">Авторизация</h1>
-        <button id="theme-toggle" class="flex w-8 h-8 items-center justify-center gap-2.5 p-1 relative bg-collection-1-sub-default rounded-md hover:opacity-80 transition-opacity" type="button" aria-label="Переключить тему">
-          <img class="relative w-6 h-6" src="./assets/icons-sun.svg" alt="Переключить тему" />
-        </button>
-      </header>
-
-      <div class="flex flex-col items-start gap-6 p-6 relative self-stretch w-full flex-[0_0_auto] bg-collection-1-sub-default">
-        <div class="flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
-          <label class="flex flex-col h-[52px] items-start justify-center px-4 py-2.5 relative self-stretch w-full bg-collection-1-background rounded-xl border border-solid border-collection-1-stroke">
-            <span class="sr-only">Почта</span>
-            <input type="email" name="email" placeholder="operator@roblex.io" autocomplete="username" required class="relative w-full [font-family:'Inter',Helvetica] font-medium text-collection-1-glyphs-body text-xl tracking-[-0.60px] leading-5 bg-transparent" />
-          </label>
-
-          <label class="flex h-[52px] items-center justify-between px-4 py-2.5 relative self-stretch w-full bg-collection-1-background rounded-xl border border-solid border-collection-1-stroke">
-            <span class="sr-only">Пароль</span>
-            <input type="password" name="password" placeholder="Пароль" autocomplete="current-password" required class="relative w-full [font-family:'Inter',Helvetica] font-medium text-collection-1-glyphs-body text-xl tracking-[-0.60px] leading-5 bg-transparent" />
-            <button type="button" class="peek relative w-5 h-5 flex-shrink-0 hover:opacity-80 transition-opacity" aria-label="Показать пароль">
-              <img class="relative w-5 h-5" src="./assets/icons-eye.svg" alt="Показать пароль" />
-            </button>
-          </label>
-        </div>
-
-        <button class="Buttons flex items-start justify-center gap-1.5 p-4 relative self-stretch w-full flex-[0_0_auto] bg-collection-1-buttons-primary-default rounded-xl border border-solid border-collection-1-buttons-stroke hover:opacity-90 transition-opacity" type="submit">
-          <span class="relative w-fit mt-[-1.00px] [font-family:'Inter',Helvetica] font-medium text-collection-1-buttons-glyphs text-xl tracking-[-0.60px] leading-5 whitespace-nowrap">Продолжить</span>
-        </button>
-      </div>
-
-      <footer class="flex items-start justify-between px-6 py-4 relative self-stretch w-full flex-[0_0_auto] bg-collection-1-impr-default border-t [border-top-style:solid] border-collection-1-stroke">
-        <button type="button" id="remember-toggle" class="inline-flex items-center gap-2 relative flex-[0_0_auto] hover:opacity-80 transition-opacity" aria-pressed="false">
-          <div class="relative w-6 h-6 rounded-md bg-[linear-gradient(98deg,rgba(204,204,204,0)_0%,rgba(204,204,204,0)_25%,rgba(204,204,204,0.3)_50%,rgba(204,204,204,0)_75%,rgba(204,204,204,0)_100%),linear-gradient(0deg,rgba(227,227,227,0.3)_0%,rgba(227,227,227,0.3)_100%)]"></div>
-          <span class="font-medium text-collection-1-glyphs-body text-xl tracking-[-0.60px] leading-5 relative w-fit whitespace-nowrap">Не выбрано</span>
-        </button>
-        <button class="footer-chevron" type="button" aria-label="Выбрать окружение">
-          <img class="relative w-5 h-5" src="./assets/icons-chevron-right.svg" alt="далее" />
-        </button>
-      </footer>
-    </form>
-  </div>
-
-  <script type="module" src="./script.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Авторизация - Roblex</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      @import url("https://fonts.googleapis.com/css?family=Inter:500,600");
+    </style>
+    <style>
+      @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+      * {
+        -webkit-font-smoothing: antialiased;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0px;
+        height: 100%;
+      }
+      /* a blue color as a generic focus style */
+      button:focus-visible {
+        outline: 2px solid #4a90e2 !important;
+        outline: -webkit-focus-ring-color auto 5px !important;
+      }
+      a {
+        text-decoration: none;
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-Q0GrODgn.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-tOdZXzcX.css">
+  </head>
+  <body>
+    <div id="app"></div>
+  <script>window.__ANIMA_PLAYGROUND_ID__="1sunRxfK"</script>
+<script src="https://unpkg.com/@animaapp/playground-sdk@0"></script></body>
 </html>
