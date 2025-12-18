@@ -60,12 +60,7 @@
         filter: none !important;
         box-shadow: none !important;
       }
-      /* Remove any background plate behind the sun/moon toggle */
-      button:has(svg[viewBox="0 0 20 20"]) {
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-      }
+
       /* Force eye icon to use local asset and hide broken img placeholders */
       input[type="password"] ~ button img {
         display: none !important;
@@ -85,19 +80,11 @@
         border: none !important;
       }
 
-      /* Give the search bar a clear outline */
-      input[type="search"],
-      input[placeholder*="Search"] {
-        border: 1px solid var(--collection-1-stroke) !important;
-        border-radius: 10px !important;
-        background: transparent !important;
-        padding: 10px 12px !important;
-      }
-
       /* Make the primary action button read as a button */
       .bg-collection-1-buttons-primary-default {
         border: 1px solid var(--collection-1-stroke) !important;
         box-shadow: none !important;
+        cursor: pointer !important;
         transition: background-color 120ms ease, transform 120ms ease;
       }
       .bg-collection-1-buttons-primary-default:hover {
@@ -107,10 +94,83 @@
       .bg-collection-1-buttons-primary-default:active {
         transform: translateY(0);
       }
+
+      /* Theme toggle buttons (login + dashboard) */
+      button[aria-label="Переключить тему"],
+      button[aria-label="Toggle theme"],
+      .roblex-icon-button {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+
+      /* Header search trigger */
+      .roblex-search-trigger {
+        border-radius: 14px !important;
+        border: 1px solid var(--collection-1-stroke) !important;
+        background-color: var(--collection-1-background) !important;
+        box-shadow: none !important;
+      }
+      .roblex-search-trigger:hover {
+        border-color: var(--collection-1-stroke-active) !important;
+      }
+
+      /* Command palette card/input clean-up */
+      .roblex-command-dialog {
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+      .roblex-command-input {
+        border: 1px solid var(--collection-1-stroke) !important;
+        border-radius: 12px !important;
+        background: transparent !important;
+        padding: 0 4px !important;
+      }
     </style>
   </head>
   <body>
     <div id="app"></div>
+  <script>
+    (function () {
+      const addThemeToggleClass = () => {
+        document
+          .querySelectorAll('button[aria-label="Переключить тему"], button[aria-label="Toggle theme"]')
+          .forEach((btn) => btn.classList.add("roblex-icon-button"));
+      };
+
+      const addSearchTriggerClass = () => {
+        const trigger = Array.from(document.querySelectorAll("button")).find(
+          (btn) =>
+            btn.querySelector("kbd") &&
+            (btn.textContent.trim().startsWith("Search") || btn.textContent.trim().startsWith("Поиск"))
+        );
+        if (trigger) trigger.classList.add("roblex-search-trigger");
+      };
+
+      const styleCommandPalette = () => {
+        document.querySelectorAll('[role="dialog"]').forEach((dialog) => {
+          dialog.classList.add("roblex-command-dialog");
+          const input = dialog.querySelector('input[type="text"]');
+          if (input) input.classList.add("roblex-command-input");
+          dialog
+            .querySelectorAll('button[aria-label="Clear search"]')
+            .forEach((btn) => btn.classList.add("roblex-icon-button"));
+        });
+      };
+
+      const runOnce = () => {
+        addThemeToggleClass();
+        addSearchTriggerClass();
+        styleCommandPalette();
+      };
+
+      document.addEventListener("DOMContentLoaded", runOnce);
+
+      const observer = new MutationObserver(runOnce);
+      observer.observe(document.documentElement, { childList: true, subtree: true });
+    })();
+  </script>
   <script>window.__ANIMA_PLAYGROUND_ID__="1sunRxfK"</script>
 <script src="https://unpkg.com/@animaapp/playground-sdk@0"></script></body>
 </html>
