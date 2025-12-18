@@ -1,0 +1,13 @@
+[phases.install]
+cmds = [
+  "npm --prefix ../../RoblexLandingPage ci --include=dev",
+]
+
+[phases.build]
+cmds = [
+  "npm --prefix ../../RoblexLandingPage run build",
+]
+
+[start]
+cmd = "npm --prefix ../../RoblexLandingPage start"
+

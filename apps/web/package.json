@@ -1,0 +1,11 @@
+{
+  "name": "roblex-web-compat",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Compatibility wrapper for Railway deployments rooted at apps/web",
+  "scripts": {
+    "prestart": "npm --prefix ../../RoblexLandingPage ci --include=dev",
+    "start": "npm --prefix ../../RoblexLandingPage start"
+  }
+}
+
