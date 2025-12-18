@@ -240,9 +240,9 @@ app.post('/api/resend-code', async (req, res) => {
 // ------------------------------------
 // Static Admin Login (served separately from public landing)
 // ------------------------------------
-const adminLoginPath = path.resolve(__dirname, '..', 'RoblexLandingPage', 'AdminPanel', 'management', 'login');
-app.use('/management/login', express.static(adminLoginPath));
-app.get('/management/login', (_req, res) => {
+const adminLoginPath = path.resolve(__dirname, '..', '..', 'RoblexLandingPage', 'AdminPanel', 'login');
+app.use('/admin/login', express.static(adminLoginPath));
+app.get('/admin/login', (_req, res) => {
     res.sendFile(path.join(adminLoginPath, 'index.html'));
 });
 

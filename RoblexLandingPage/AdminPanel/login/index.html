@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roblex Admin Login</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="login-shell">
+    <section class="login-card" role="main">
+      <header class="login-card__header">
+        <p class="eyebrow">Internal Portal</p>
+        <h1>Roblex Control Room</h1>
+        <p class="subtitle">Production operators only. All sign-ins are audited.</p>
+      </header>
+
+      <form class="login-form" id="admin-login-form" novalidate>
+        <label class="form-field">
+          <span>Email</span>
+          <input type="email" name="email" placeholder="admin@roblex.io" required autocomplete="username" />
+        </label>
+
+        <label class="form-field">
+          <span>Password</span>
+          <input type="password" name="password" placeholder="••••••••" required autocomplete="current-password" />
+        </label>
+
+        <div class="form-meta">
+          <label class="remember">
+            <input type="checkbox" name="remember" />
+            <span>Remember this device</span>
+          </label>
+          <a class="link" href="mailto:security@roblex.io">Forgot access?</a>
+        </div>
+
+        <button type="submit">Access Console</button>
+        <p class="legal">By continuing you acknowledge the <a href="https://roblex.io/security">Roblex security policy</a>.</p>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="./script.js"></script>
+</body>
+</html>
