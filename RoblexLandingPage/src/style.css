@@ -12,6 +12,60 @@ body {
     padding-top: 0;
 }
 
+.auth-page {
+    background-color: #0A0A0A;
+}
+
+.auth-main {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 20px 60px;
+}
+
+.auth-shell {
+    width: min(460px, 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+}
+
+.auth-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.auth-tagline {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    max-width: 32ch;
+}
+
+.auth-panel {
+    width: 100%;
+}
+
+.auth-links {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.auth-links a {
+    color: rgba(156, 193, 255, 0.9);
+    text-decoration: none;
+}
+
+.auth-links span {
+    margin: 0 8px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
 .main-header {
     position: fixed;
     top: 0;

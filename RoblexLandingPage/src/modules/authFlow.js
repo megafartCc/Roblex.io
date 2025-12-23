@@ -7,7 +7,8 @@ export function initAuthFlow() {
   const panel = document.querySelector('.auth-panel');
   if (!form || !tabs.length || !panel) return;
 
-  let mode = 'login';
+  const defaultMode = (panel.dataset.defaultMode || '').trim().toLowerCase();
+  let mode = defaultMode === 'register' ? 'register' : 'login';
 
   function setMode(nextMode) {
     mode = nextMode;
