@@ -62,6 +62,7 @@ export async function migrate() {
       password_hash VARCHAR(255) NOT NULL,
       verification_code VARCHAR(10),
       is_verified TINYINT(1) NOT NULL DEFAULT 0,
+      is_admin TINYINT(1) NOT NULL DEFAULT 0,
       code_expires_at DATETIME NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -71,5 +72,6 @@ export async function migrate() {
   // Backfill columns on older MySQL versions that lack ADD COLUMN IF NOT EXISTS
   await ensureColumn('users', 'verification_code', 'verification_code VARCHAR(10)');
   await ensureColumn('users', 'is_verified', 'is_verified TINYINT(1) NOT NULL DEFAULT 0');
+  await ensureColumn('users', 'is_admin', 'is_admin TINYINT(1) NOT NULL DEFAULT 0');
   await ensureColumn('users', 'code_expires_at', 'code_expires_at DATETIME NULL');
 }

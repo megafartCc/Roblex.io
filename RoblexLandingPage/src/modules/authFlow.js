@@ -1,4 +1,4 @@
-const API_BASE = 'https://backendroblex.up.railway.app';
+const API_BASE = 'https://api.roblex.io';
 
 export function initAuthFlow() {
   const form = document.getElementById('auth-form');

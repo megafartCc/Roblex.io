@@ -12,9 +12,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const REQUIRE_EMAIL_VERIFICATION = ['true', '1', 'yes'].includes(
-    String(process.env.REQUIRE_EMAIL_VERIFICATION || '').toLowerCase()
-);
+const REQUIRE_EMAIL_VERIFICATION = false;
 const MIN_PASSWORD_LENGTH = Number.parseInt(process.env.MIN_PASSWORD_LENGTH || '8', 10);
 const PASSWORD_MIN_LENGTH = Number.isFinite(MIN_PASSWORD_LENGTH) && MIN_PASSWORD_LENGTH > 0 ? MIN_PASSWORD_LENGTH : 8;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -108,7 +106,7 @@ app.post('/api/register', async (req, res) => {
             // 2. Insert user with code, EXPIRATION TIME, and UNVERIFIED status
             // DB Columns used: email, password_hash, verification_code, is_verified, code_expires_at
             const [result] = await pool.query(
-                'INSERT INTO users (email, password_hash, verification_code, is_verified, code_expires_at) VALUES (?, ?, ?, 0, ?)',
+                'INSERT INTO users (email, password_hash, verification_code, is_verified, is_admin, code_expires_at) VALUES (?, ?, ?, 0, 0, ?)',
                 [email, passwordHash, verificationCode, expirationTime]
             );
 
@@ -125,7 +123,7 @@ app.post('/api/register', async (req, res) => {
         }
 
         const [result] = await pool.query(
-            'INSERT INTO users (email, password_hash, is_verified) VALUES (?, ?, 1)',
+            'INSERT INTO users (email, password_hash, is_verified, is_admin) VALUES (?, ?, 1, 0)',
             [email, passwordHash]
         );
 
@@ -155,7 +153,7 @@ app.post('/api/login', async (req, res) => {
             return res.status(400).json({ error: errorMessage });
         }
         
-        const [rows] = await pool.query('SELECT id, password_hash, is_verified FROM users WHERE email = ?', [email]);
+        const [rows] = await pool.query('SELECT id, password_hash, is_verified, is_admin FROM users WHERE email = ?', [email]);
         if (rows.length === 0) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
@@ -174,7 +172,7 @@ app.post('/api/login', async (req, res) => {
 
         // TODO: Implement JWT generation here
 
-        res.json({ ok: true, userId: user.id, message: 'Login successful' });
+        res.json({ ok: true, userId: user.id, isAdmin: Boolean(user.is_admin), message: 'Login successful' });
     } catch (err) {
         console.error('[login] error', err);
         res.status(500).json({ error: 'Internal error' });
